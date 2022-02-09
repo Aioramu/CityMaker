@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432"
+  web:
+    restart: always
+    build: .
+    command: uvicorn api:app --workers 3 --host 0.0.0.0 --reload
+    volumes:
+      - .:/code
+      - /etc/letsencrypt/:/etc/letsencrypt/
+    environment:
+      - COMPOSE_HTTP_TIMEOUT=90
+      - TZ=Europe/Moscow
+      - API_KEY=e0f9c77fa6dd1f609efb2f811c607a22
+    ports:
+      - 80:8000
